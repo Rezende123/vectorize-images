@@ -6,8 +6,11 @@
 
 all:	vetoriza
 
-vetoriza:  vetoriza.o winGL.o 
+vetoriza:  vetoriza.o winGL.o tree.o
 	g++ -o $@ $^ -L./external/SOIL/lib -lglut -lGL -lGLU -lsoil
+
+tree.o: tree/tree.c tree/tree.h
+	gcc -c tree/tree.c
 
 clean:
 	rm *.o *.*~ *~ vetoriza
