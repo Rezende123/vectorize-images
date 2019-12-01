@@ -7,6 +7,7 @@
 
 #include "Ponto.h"
 #include "winGL.h"
+#include "tree/tree.h"
 		
 unsigned char* 	image = NULL;	// image file
 int 			iHeight, 
@@ -142,18 +143,23 @@ void desenho(void) {
 
 int main(int argc, char** argv) {
 	
-	char* filename = "images/Twitter.png";
+	// char* filename = "images/Twitter.png";
 
-    if (argc > 1)
-		filename = argv[1];
+    // if (argc > 1)
+	// 	filename = argv[1];
 
-	image = leImagem(filename);
+	// image = leImagem(filename);
 			
-	criaJanela(argc, argv);
+	// criaJanela(argc, argv);
 
-    initOpenGL();
+    // initOpenGL();
     
-    initEventos();
+    // initEventos();
     
+    int arr[] = { 1, 2, 3, 4, 5, 6, 6, 6, 6 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    tNode* root = insertLevelOrder(arr, root, 0, n); 
+    printTree(root, 0);
+	
     return 0;   
 }

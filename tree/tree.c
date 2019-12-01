@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "tree.h"
+#define LEVEL_DISTANCE 10 
 
 tNode* createNode(int data) 
 { 
@@ -53,12 +54,19 @@ tNode* insertLevelOrder(int arr[], tNode* root, int i, int n)
     return root; 
 }
 
-void inOrder(tNode* root) 
+void printTree(tNode *root, int space) 
 { 
-    if (root != NULL) 
-    { 
-        inOrder(root->left); 
-        printf(" [%d] \n", root->data); 
-        inOrder(root->right); 
-    } 
-}
+    if (root == NULL) 
+        return; 
+        
+    space += LEVEL_DISTANCE; 
+    
+    printTree(root->right, space); 
+    
+    printf("\n"); 
+    for (int i = LEVEL_DISTANCE; i < space; i++) 
+        printf(" "); 
+    printf("%d\n", root->data); 
+    
+    printTree(root->left, space); 
+} 
