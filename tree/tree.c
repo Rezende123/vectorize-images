@@ -1,6 +1,9 @@
-#include "tree.h";
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "tree.h"
 
-tNode* newNode(int data) 
+tNode* createNode(int data) 
 { 
   // Allocate memory for new node  
   tNode* node = (tNode*) malloc(sizeof(tNode)); 
@@ -16,7 +19,7 @@ tNode* newNode(int data)
 
 tNode* insertNode(tNode* node, int data) 
 { 
-    if (node == NULL) return newNode(data); 
+    if (node == NULL) return createNode(data); 
   
     if (data < node->data) 
         node->left  = insertNode(node->left, data); 
@@ -35,4 +38,27 @@ tNode* search(tNode* root, int data)
        return search(root->right, data); 
 
     return search(root->left, data); 
+}
+
+tNode* insertLevelOrder(int arr[], tNode* root, int i, int n) 
+{ 
+    if (i < n) 
+    { 
+        tNode* temp = createNode(arr[i]); 
+        root = temp;
+
+        root->left = insertLevelOrder(arr, root->left, 2 * i + 1, n); 
+        root->right = insertLevelOrder(arr, root->right, 2 * i + 2, n); 
+    } 
+    return root; 
+}
+
+void inOrder(tNode* root) 
+{ 
+    if (root != NULL) 
+    { 
+        inOrder(root->left); 
+        printf(" [%d] \n", root->data); 
+        inOrder(root->right); 
+    } 
 }
