@@ -71,10 +71,10 @@ void desenhaVetorizacao() {
 void vetorizaImagem() {
 	
 	printf("Aqui eu vou construir a estrutura base para a vetorizacao\n");
-	
-	// codifique aqui a sua rotina de montagem da estrutura de dados para suporte a
-	// vetorizacao 
-	
+ 
+    tNode* root = parseArrayToTree(image, root, 0, iWidth * iHeight); 
+    detectBorder(root);
+	parseTreeToArray(root, image);	
 }
 	
 /// ***********************************************************************
@@ -143,23 +143,18 @@ void desenho(void) {
 
 int main(int argc, char** argv) {
 	
-	// char* filename = "images/Twitter.png";
+	char* filename = "images/Twitter.png";
 
-    // if (argc > 1)
-	// 	filename = argv[1];
+    if (argc > 1)
+		filename = argv[1];
 
-	// image = leImagem(filename);
+	image = leImagem(filename);
 			
-	// criaJanela(argc, argv);
+	criaJanela(argc, argv);
 
-    // initOpenGL();
+    initOpenGL();
     
-    // initEventos();
-    
-    int arr[] = { 1, 2, 3, 4, 5, 6, 6, 6, 6 }; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    tNode* root = insertLevelOrder(arr, root, 0, n); 
-    printTree(root, 0);
+    initEventos();
 	
     return 0;   
 }

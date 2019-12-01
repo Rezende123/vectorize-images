@@ -2,17 +2,15 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "tree.h"
-#define LEVEL_DISTANCE 10 
+#define LEVEL_DISTANCE 1 
 
-tNode* createNode(int data) 
+tNode* createNode(int data, int index) 
 { 
-  // Allocate memory for new node  
   tNode* node = (tNode*) malloc(sizeof(tNode)); 
   
-  // Assign data to this node 
   node->data = data; 
+  node->index = index; 
   
-  // Initialize left and right children as NULL 
   node->left = NULL; 
   node->right = NULL; 
   return  node; 
@@ -20,7 +18,7 @@ tNode* createNode(int data)
 
 tNode* insertNode(tNode* node, int data) 
 { 
-    if (node == NULL) return createNode(data); 
+    if (node == NULL) return createNode(data, 0); 
   
     if (data < node->data) 
         node->left  = insertNode(node->left, data); 
@@ -41,17 +39,49 @@ tNode* search(tNode* root, int data)
     return search(root->left, data); 
 }
 
-tNode* insertLevelOrder(int arr[], tNode* root, int i, int n) 
+tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n) 
 { 
     if (i < n) 
     { 
-        tNode* temp = createNode(arr[i]); 
+        tNode* temp = createNode(arr[i], i); 
         root = temp;
 
-        root->left = insertLevelOrder(arr, root->left, 2 * i + 1, n); 
-        root->right = insertLevelOrder(arr, root->right, 2 * i + 2, n); 
+        root->left = parseArrayToTree(arr, root->left, 2 * i + 1, n); 
+        root->right = parseArrayToTree(arr, root->right, 2 * i + 2, n); 
     } 
     return root; 
+}
+
+void detectBorder(tNode *root) {
+    if (root == NULL) 
+        return; 
+
+    if (root->left != NULL) {
+        if (root->data == 255 && root->left->data == 0) {
+            root->left->data = 125;
+        }
+        detectBorder(root->left);
+    }
+
+    if (root->right != NULL) {
+        if (root->data == 255 && root->right->data == 0) {
+            root->right->data = 125;
+        }
+        detectBorder(root->right);
+    }
+}
+
+void parseTreeToArray(tNode *node, unsigned char * arr)
+{
+     if(node == NULL)
+          return;
+
+     arr[node->index] = node->data;
+
+     if(node->left != NULL)
+          parseTreeToArray(node->left, arr);
+     if(node->right != NULL)
+          parseTreeToArray(node->right, arr);
 }
 
 void printTree(tNode *root, int space) 

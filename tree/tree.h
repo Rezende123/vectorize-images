@@ -1,12 +1,15 @@
 typedef struct node  
 { 
-    int data; 
+    int data;
+    int index;
     struct node *left; 
     struct node *right; 
 } tNode; 
 
-tNode* createNode(int data);
+tNode* createNode(int data, int index);
 tNode* insertNode(tNode* node, int data);
 tNode* search(tNode* root, int data);
-tNode* insertLevelOrder(int arr[], tNode* root, int i, int n);
+tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n);
 void printTree(tNode *root, int space);
+void detectBorder(tNode *root);
+void parseTreeToArray(tNode *node, unsigned char * arr);
