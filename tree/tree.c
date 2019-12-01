@@ -56,19 +56,21 @@ void detectBorder(tNode *root) {
     if (root == NULL) 
         return; 
 
-    if (root->left != NULL) {
-        if (root->data == 255 && root->left->data == 0) {
-            root->left->data = 125;
-        }
-        detectBorder(root->left);
+    if (
+        ((
+            (root->right != NULL && root->right->data == 255) && 
+            (root->left != NULL && root->left->data == 0)
+        ) ||
+        (
+            (root->right != NULL && root->right->data == 0) && 
+            (root->left != NULL && root->left->data == 255)
+        ))) {
+        root->data = 125;
     }
 
-    if (root->right != NULL) {
-        if (root->data == 255 && root->right->data == 0) {
-            root->right->data = 125;
-        }
-        detectBorder(root->right);
-    }
+    detectBorder(root->left);
+
+    detectBorder(root->right);
 }
 
 void parseTreeToArray(tNode *node, unsigned char * arr)
