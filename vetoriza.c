@@ -29,8 +29,11 @@ void negativaImage(unsigned char* img, int w, int h) {
 		return;
 
 	for (j = 0 ; j < h ; j++) 
-		for (i = 0 ; i < w ; i++) 
-			img[j*w+i] = 255 - img[j*w+i]; 
+		for (i = 0 ; i < w ; i++) {
+			int index = j*w+i;
+
+			img[index] = 255 - img[index];
+		}
 }
 
 // ***********************************************
@@ -139,7 +142,7 @@ void desenho(void) {
 
 int main(int argc, char** argv) {
 	
-char* filename = "images/Twitter.png";
+	char* filename = "images/Twitter.png";
 
     if (argc > 1)
 		filename = argv[1];
