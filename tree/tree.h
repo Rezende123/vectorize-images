@@ -11,5 +11,5 @@ tNode* insertNode(tNode* node, int data);
 tNode* search(tNode* root, int data);
 tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n);
 void printTree(tNode *root, int space);
-void detectBorder(tNode *root);
+void cannyEfect(tNode *root);
 void parseTreeToArray(tNode *node, unsigned char * arr);

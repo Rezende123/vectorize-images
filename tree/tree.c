@@ -52,7 +52,7 @@ tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n)
     return root; 
 }
 
-void detectBorder(tNode *root) {
+void cannyEfect(tNode *root) {
     if (root == NULL) 
         return; 
 
@@ -65,12 +65,16 @@ void detectBorder(tNode *root) {
             (root->right != NULL && root->right->data == 0) && 
             (root->left != NULL && root->left->data == 255)
         ))) {
-        root->data = 125;
+        root->right->data = root->left->data = 125;
     }
 
-    detectBorder(root->left);
+    if (root->data == 255) {
+        root->data = 0;
+    }
 
-    detectBorder(root->right);
+    cannyEfect(root->left);
+
+    cannyEfect(root->right);
 }
 
 void parseTreeToArray(tNode *node, unsigned char * arr)

@@ -73,7 +73,7 @@ void vetorizaImagem() {
 	printf("Aqui eu vou construir a estrutura base para a vetorizacao\n");
  
     tNode* root = parseArrayToTree(image, root, 0, iWidth * iHeight); 
-    detectBorder(root);
+    cannyEfect(root);
 	parseTreeToArray(root, image);	
 }
 	
