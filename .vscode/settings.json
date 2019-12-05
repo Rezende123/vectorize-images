@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "tree.h": "c"
+        "tree.h": "c",
+        "*.tcc": "c",
+        "limits": "c"
     }
 }

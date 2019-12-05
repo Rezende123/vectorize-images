@@ -11,8 +11,10 @@ tNode* createNode(int data, int index)
   node->data = data; 
   node->index = index; 
   
-  node->left = NULL; 
-  node->right = NULL; 
+  node->quad1 = NULL; 
+  node->quad2 = NULL; 
+  node->quad3 = NULL; 
+  node->quad4 = NULL; 
   return  node; 
 }
 
@@ -21,9 +23,9 @@ tNode* insertNode(tNode* node, int data)
     if (node == NULL) return createNode(data, 0); 
   
     if (data < node->data) 
-        node->left  = insertNode(node->left, data); 
+        node->quad1  = insertNode(node->quad1, data); 
     else if (data > node->data) 
-        node->right = insertNode(node->right, data);    
+        node->quad2 = insertNode(node->quad2, data);    
   
     return node; 
 }
@@ -34,9 +36,9 @@ tNode* search(tNode* root, int data)
        return root; 
 
     if (root->data < data) 
-       return search(root->right, data); 
+       return search(root->quad2, data); 
 
-    return search(root->left, data); 
+    return search(root->quad1, data); 
 }
 
 tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n) 
@@ -46,8 +48,23 @@ tNode* parseArrayToTree(unsigned char arr[], tNode* root, int i, int n)
         tNode* temp = createNode(arr[i], i); 
         root = temp;
 
-        root->left = parseArrayToTree(arr, root->left, 2 * i + 1, n); 
-        root->right = parseArrayToTree(arr, root->right, 2 * i + 2, n); 
+        root->quad1 = parseArrayToTree(arr, root->quad1, 2 * i + 1, n); 
+        root->quad2 = parseArrayToTree(arr, root->quad2, 2 * i + 2, n); 
+    } 
+    return root; 
+}
+
+tNode* parseArrayToQuadTree(unsigned char arr[], tNode* root, int i, int n) 
+{ 
+    if (i < n) 
+    { 
+        tNode* temp = createNode(arr[i], i); 
+        root = temp;
+        
+        root->quad1 = parseArrayToQuadTree(arr, root->quad1, 4 * i + 1, n); 
+        root->quad2 = parseArrayToQuadTree(arr, root->quad2, 4 * i + 2, n); 
+        root->quad3 = parseArrayToQuadTree(arr, root->quad3, 4 * i + 3, n); 
+        root->quad4 = parseArrayToQuadTree(arr, root->quad4, 4 * i + 4, n); 
     } 
     return root; 
 }
@@ -58,23 +75,63 @@ void cannyEfect(tNode *root) {
 
     if (
         ((
-            (root->right != NULL && root->right->data == 255) && 
-            (root->left != NULL && root->left->data == 0)
+            (root->quad2 != NULL && root->quad2->data == 255) && 
+            (root->quad1 != NULL && root->quad1->data == 0)
         ) ||
         (
-            (root->right != NULL && root->right->data == 0) && 
-            (root->left != NULL && root->left->data == 255)
+            (root->quad2 != NULL && root->quad2->data == 0) && 
+            (root->quad1 != NULL && root->quad1->data == 255)
         ))) {
-        root->right->data = root->left->data = 125;
+        root->quad2->data = root->quad1->data = 125;
     }
 
     if (root->data == 255) {
         root->data = 0;
     }
 
-    cannyEfect(root->left);
+    cannyEfect(root->quad1);
 
-    cannyEfect(root->right);
+    cannyEfect(root->quad2);
+}
+
+void edgeEfect(tNode *root) {
+    if (root == NULL) 
+        return;
+
+    if (
+        (   (root->quad1 != NULL && root->quad1->data == 0) ||
+            (root->quad2 != NULL && root->quad2->data == 0) || 
+            (root->quad3 != NULL && root->quad3->data == 0) ||
+            (root->quad4 != NULL && root->quad4->data == 0)
+        )
+            &&
+        (   (root->quad1 != NULL && root->quad1->data > 100) ||
+            (root->quad2 != NULL && root->quad2->data > 100) || 
+            (root->quad3 != NULL && root->quad3->data > 100) ||
+            (root->quad4 != NULL && root->quad4->data > 100)
+        )
+    ) {
+        if (root->quad1 != NULL && root->quad1->data == 0) {
+            root->quad1->data = 125;
+        }
+        if (root->quad2 != NULL && root->quad2->data == 0) {
+            root->quad2->data = 125;
+        }
+        if (root->quad3 != NULL && root->quad3->data == 0) {
+            root->quad3->data = 125;
+        }
+        if (root->quad4 != NULL && root->quad4->data == 0) {
+            root->quad4->data = 125;
+        }
+    }
+
+    edgeEfect(root->quad1);
+
+    edgeEfect(root->quad2);
+
+    edgeEfect(root->quad3);
+
+    edgeEfect(root->quad4);
 }
 
 void parseTreeToArray(tNode *node, unsigned char * arr)
@@ -84,10 +141,14 @@ void parseTreeToArray(tNode *node, unsigned char * arr)
 
      arr[node->index] = node->data;
 
-     if(node->left != NULL)
-          parseTreeToArray(node->left, arr);
-     if(node->right != NULL)
-          parseTreeToArray(node->right, arr);
+     if(node->quad1 != NULL)
+          parseTreeToArray(node->quad1, arr);
+     if(node->quad2 != NULL)
+          parseTreeToArray(node->quad2, arr);
+     if(node->quad3 != NULL)
+          parseTreeToArray(node->quad3, arr);
+     if(node->quad4 != NULL)
+          parseTreeToArray(node->quad4, arr);
 }
 
 void printTree(tNode *root, int space) 
@@ -97,12 +158,12 @@ void printTree(tNode *root, int space)
         
     space += LEVEL_DISTANCE; 
     
-    printTree(root->right, space); 
+    printTree(root->quad2, space); 
     
     printf("\n"); 
     for (int i = LEVEL_DISTANCE; i < space; i++) 
         printf(" "); 
     printf("%d\n", root->data); 
     
-    printTree(root->left, space); 
+    printTree(root->quad1, space); 
 } 

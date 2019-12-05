@@ -12,6 +12,7 @@
 unsigned char* 	image = NULL;	// image file
 int 			iHeight, 
 				iWidth,
+				edgeLevel = 1,
 				iChannels;
 
 bool 			desenha = false;
@@ -70,11 +71,21 @@ void desenhaVetorizacao() {
 
 void vetorizaImagem() {
 	
-	printf("Aqui eu vou construir a estrutura base para a vetorizacao\n");
+	printf("CANNY EFECT\n");
  
     tNode* root = parseArrayToTree(image, root, 0, iWidth * iHeight); 
     cannyEfect(root);
 	parseTreeToArray(root, image);	
+}
+
+void edgeImage() {
+	
+	printf("EDGE EFECT LEVEL %d\n", edgeLevel);
+	
+    tNode* root = parseArrayToQuadTree(image, root, 0, iWidth * iHeight); 
+    edgeEfect(root);
+	parseTreeToArray(root, image);	
+	edgeLevel++;
 }
 	
 /// ***********************************************************************
@@ -88,7 +99,10 @@ void teclado(unsigned char key, int x, int y) {
 						break;				
 		case 'v'	:
 		case 'V'	: 	vetorizaImagem();
-						break;				
+						break;	
+		case 'e'	:
+		case 'E'	:	edgeImage();
+						break;
 		case 'q'	:
 		case 'Q'	: 	desenha = !desenha;
 						break;	
