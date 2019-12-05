@@ -2,6 +2,8 @@
     "files.associations": {
         "tree.h": "c",
         "*.tcc": "c",
-        "limits": "c"
+        "limits": "c",
+        "ponto.h": "c",
+        "cmath": "c"
     }
 }

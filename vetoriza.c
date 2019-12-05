@@ -12,8 +12,10 @@
 unsigned char* 	image = NULL;	// image file
 int 			iHeight, 
 				iWidth,
-				edgeLevel = 1,
+				edgeLevel = 10,
 				iChannels;
+
+tNode * imageTree;
 
 bool 			desenha = false;
 
@@ -43,25 +45,13 @@ void negativaImage(unsigned char* img, int w, int h) {
 // ***********************************************
 
 void desenhaVetorizacao() {
-
-	printf("Aqui eu vou desenhar o resultado da vetorizacao\n");
 	
 	// rotina que deve ser implementada para visualizacao da arvore
 	// utilize a rotina desenhaQuadrante(p0, p1, cor)
 	// fornecendo os pontos inicial e final do quadrante e a sua cor
 	// funcao do valor do pixel ou da regiao que voce quer desenhar
-	
-	tPonto p0, p1;
 	 
-	p0.x = p0.y = 0;
-
-	p1.x = iWidth/2;
-	p1.y = iHeight/2;	
-	desenhaQuadrante(p0, p1, 64);
-
-	p0.x = iWidth;
-	p0.y = iHeight;
-	desenhaQuadrante(p0, p1, 222);
+    edgeEfect(imageTree);
 
 }
 	
@@ -82,9 +72,9 @@ void edgeImage() {
 	
 	printf("EDGE EFECT LEVEL %d\n", edgeLevel);
 	
-    tNode* root = parseArrayToQuadTree(image, root, 0, iWidth * iHeight); 
-    edgeEfect(root);
-	parseTreeToArray(root, image);	
+    imageTree = parseArrayToQuadTree(image, imageTree, 0, edgeLevel, iWidth * iHeight, 1,0,0);
+	// parseTreeToArray(root, image);	
+	desenha = true;
 	edgeLevel++;
 }
 	
